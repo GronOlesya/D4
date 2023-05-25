@@ -1,0 +1,135 @@
+py manage.py shell
+from NewsApp.models import *
+
+User.objects.create_user('user1')
+User.objects.create_user('user2')
+
+a1 = Author.objects.create(author=User.objects.get(username='user1'))
+a2 = Author.objects.create(author=User.objects.get(username='user2'))
+
+c1 = Category.objects.create(news_category='Животный мир')
+c2 = Category.objects.create(news_category='Расследования')
+c3 = Category.objects.create(news_category='Шокирующие факты')
+c4 = Category.objects.create(news_category='18+')
+
+post_1 = Post.objects.create(author_post=Author.objects.get(id=1), post_type_select='Article',
+                post_heading = 'Найденному щенку сделали ДНК-тест, чтобы подтвердить, что он собака, а не койот',
+                post_text =  'Сотрудники службы охраны животных Далласа (Техас, США) обнаружили возле мусорного бака беспризорного щенка и отправили его в приют.Юная собака получила кличку Тост и чувствовала себя отлично, так что можно было бы начать подыскивать ей хозяев, если бы не одно «но».Специалисты заподозрили, что Тост может быть вовсе не собакой, а койотом (возможно, помесью собаки и койота).Чтобы все сомнения отпали, щенку сделали ДНК-тест. И вот недавно официальные лица сообщили радостную новость — подтверждено, что Тост является стопроцентной собакой, помесью немецкой овчарки, хаски и австралийской пастушьей собаки.В ближайшее время симпатичная дворняжка будет доступна для «усыновления».')
+
+ca1 = Category.objects.get(id=1)
+post_1.post_category.add(ca1)
+
+post_2 = Post.objects.create(author_post=Author.objects.get(id=2), post_type_select='News',
+                post_heading = 'Убийца напился бренди и вернулся на место преступления, чтобы помочь расследованию',
+                post_text = 'Полицейские из Челмсфорда (Англия) быстро раскрыли дело об убийстве 44-летнего Адриана Эллингфорда, и помог им сам убийца.Офицеры прибыли в дом погибшего мужчины, которого зарезали ножом, и практически сразу к ним подошёл сильно пьяный незнакомец, державший в руках бутылку бренди.Мужчина заявил, что не скажет своё имя, но он очень нужен и важен для полицейских, ведь он единственный, кто знает, что именно произошло.Дальше незнакомец, порой прерываясь на ругань, стал рассказывать о том, что Адриана зарезал какой-то неизвестный человек.Полицейские не без оснований посчитали поведение мужчины подозрительным и арестовали его.Позже 26-летний Марсель Хекко признался в том, что сам убил Адриана, пробравшись к нему в дом и ударив спящего мужчину ножом.Причиной преступления стало то, что к Адриану ушла любимая девушка Марселя.Что ж, теперь преступник, который так «удачно» оказал содействие расследованию, получил пожизненный тюремный срок.')
+
+ca2 = Category.objects.get(id=2)
+post_2.post_category.add(ca2)
+
+
+post_3 = Post.objects.create(author_post=Author.objects.get(id= 2), post_type_select='Article',
+                post_heading ='Партию арбузного пива отозвали из-за избыточного содержания алкоголя',
+                post_text = 'Представители пивоварни «Your Mates Brewing Co.» (Австралия) заявили, что вынуждены впервые в истории отозвать целую партию своей продукции.Проблема возникла с популярным в стране кислым арбузным пивом «Watermelon Sour Beer».Выяснилось, что в результате незапланированного вторичного брожения в напитке образуется куда большее количество алкоголя, чем заявлено.Пока проблема выявилась лишь в нескольких неохлаждённых банках, но пивовары серьёзно относятся к здоровью и безопасности потребителей, потому они и приняли такое суровое решение.')
+
+ca3 = Category.objects.get(id=3)
+post_3.post_category.add(ca2, ca3)
+
+
+Присваиваем категории статьям:
+Post.objects.get(id=1).postCategory.add(Category.objects.get(id=1))
+Post.objects.get(id=1).postCategory.add(Category.objects.get(id=2))
+
+Post.objects.get(id=2).postCategory.add(Category.objects.get(id=1))
+Post.objects.get(id=2).postCategory.add(Category.objects.get(id=2))
+
+Post.objects.get(id=3).postCategory.add(Category.objects.get(id=2))
+
+Post.objects.get(id=4).postCategory.add(Category.objects.get(id=2))
+Post.objects.get(id=4).postCategory.add(Category.objects.get(id=3))
+Post.objects.get(id=4).postCategory.add(Category.objects.get(id=4))
+
+Коментарии:
+Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=Author.objects.get(id=1).authorUser, text = 'Good')
+Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=Author.objects.get(id=2).authorUser, text = 'Cool')
+Comment.objects.create(commentPost=Post.objects.get(id=3), commentUser=Author.objects.get(id=3).authorUser, text = 'Not bad')
+Comment.objects.create(commentPost=Post.objects.get(id=4), commentUser=Author.objects.get(id=3).authorUser, text = 'Xa-xa')
+Comment.objects.create(commentPost=Post.objects.get(id=4), commentUser=Author.objects.get(id=3).authorUser, text = 'Nice')
+Comment.objects.create(commentPost=Post.objects.get(id=4), commentUser=Author.objects.get(id=4).authorUser, text = 'Super')
+Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=Author.objects.get(id=3).authorUser, text = 'Thaks')
+
+
+Лайк:
+Comment.objects.get(id=1).like()
+Comment.objects.get(id=4).like()
+
+Post.objects.get(id=1).like()
+Post.objects.get(id=2).like()
+Post.objects.get(id=3).like()
+Post.objects.get(id=4).like()
+
+Дизлайк:
+Comment.objects.get(id=1).dislike()
+
+Обновление рейтинга:
+a=Author.objects.get(id=1)
+a.update_rating()
+a.ratingAuthor
+
+b=Author.objects.get(id=2)
+b.update_rating()
+b.ratingAuthor
+
+c=Author.objects.get(id=3)
+c.update_rating()
+c.ratingAuthor
+
+d=Author.objects.get(id=4)
+d.update_rating()
+d.ratingAuthor
+
+Рейтинг лучшего:
+
+a=Author.objects.order_by('-ratingAuthor')[:1]
+ for i in a:
+     i.ratingAuthor
+     i.authorUser.username
+
+Выводим рейтинги всех пользователей применяя сортировку:
+   >>> a = Author.objects.order_by('-ratingAuthor')[:1]
+   >>> a
+Выводим рейтинги и всех пользователей применяя цикл for:
+   >>> for i in a:
+   ...     i.ratingAuthor
+   ...     i.authorUser.username
+
+
+Применяем метод preview() к постам:
+   >>> Post.objects.get(id=1).preview()
+   'Gas grill BeefEater Discovery 1200 E BBQ 4 burners has an enlarged viewing window built into the grill lid, an updated therm...'
+
+
+Определяем лучшей пост по лайкам и дислайкам:
+   >>> bestPost = Post.objects.order_by('-rating')[:1]
+   >>> bestPost
+   <QuerySet [<Post: Post object (1)>]>
+
+
+Выводм дату добавления, username автора, рейтинг, заголовок и превью лучшей статьи:
+   >>> for i in bestPost:
+   ...     i.dateCreation
+   ...     i.author.authorUser
+   ...     i.rating
+   ...     i.title
+   ...     i.preview()
+
+
+Выводим все комментарии (дата, пользователь, рейтинг, текст) к этой статье:
+   >>> bestPostCom = Comment.objects.filter(commentPost=1)
+   >>> bestPostCom
+<QuerySet [<Comment: Comment object (1)>, <Comment: Comment object (2)>]>
+Выводим через цикл for:
+   >>> for w in bestPostCom:
+   ...     w.dateCreation
+   ...     w.commentUser
+   ...     w.rating
+   ...     w.text
